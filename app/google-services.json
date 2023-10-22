@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522739997773",
+    "project_id": "simpelinsta",
+    "storage_bucket": "simpelinsta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522739997773:android:bc90970b2d36ce5fc85004",
+        "android_client_info": {
+          "package_name": "edu.iu.habahram.simpleinsta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuX2ttFemMHfG5B4mYq4juw_SD8bIRnWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
