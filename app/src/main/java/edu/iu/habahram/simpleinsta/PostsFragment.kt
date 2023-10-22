@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import edu.iu.habahram.simpleinsta.databinding.FragmentPostsBinding
 
@@ -28,6 +29,12 @@ class PostsFragment : Fragment() {
 
         val adapter = PostsAdapter(this.requireContext())
         binding.rvPosts.adapter = adapter
+        viewModel.posts.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+                adapter.notifyDataSetChanged()
+            }
+        })
         return view
     }
 

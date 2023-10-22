@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="task"
+            name="post"
             type="edu.iu.habahram.simpleinsta.model.Post" />
     </data>
     <androidx.cardview.widget.CardView
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    tools:text="rahul" />
+                    tools:text="john" />
             </LinearLayout>
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                tools:text="Super cool post description!" />
+                tools:text="Sample post description!" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
