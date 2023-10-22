@@ -32,7 +32,7 @@ class PostsViewModel : ViewModel() {
 //            }
         var postsReference = firestoreDB
             .collection("posts")
-            .limit(20)
+            .limit(30)
             .orderBy("creation_time_ms", Query.Direction.DESCENDING)
 
         postsReference.addSnapshotListener { snapshot, exception ->

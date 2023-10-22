@@ -32,7 +32,7 @@ class PostsFragment : Fragment() {
         viewModel.posts.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
-                adapter.notifyDataSetChanged()
+//                adapter.notifyDataSetChanged()
             }
         })
         return view
