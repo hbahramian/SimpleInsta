@@ -6,20 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.iu.habahram.simpleinsta.databinding.FragmentCreateBinding
 import edu.iu.habahram.simpleinsta.model.User
 
 
 class CreateFragment : Fragment() {
     val TAG = "CreateFragment"
+    private var _binding: FragmentCreateBinding? = null
+    private val binding get() = _binding!!
     private var signedInUser: User? = null
     private var photoUri: Uri? = null
     private lateinit var firestoreDb: FirebaseFirestore
@@ -28,33 +28,29 @@ class CreateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_create, container, false)
+        _binding = FragmentCreateBinding.inflate(inflater, container, false)
         // Registers a photo picker activity launcher in single-select mode.
-        val imageView = view.findViewById<ImageView>(R.id.imageView)
-        val btnPickImage = view.findViewById<Button>(R.id.btnPickImage)
-        val btnSubmit = view.findViewById<Button>(R.id.btnSubmit)
-        val etDescription = view.findViewById<EditText>(R.id.etDescription)
-
+        val view = binding.root
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
                 Log.d(TAG, "Selected URI: $uri")
                 photoUri = uri
-                imageView.setImageURI(uri)
+                binding.imageView.setImageURI(uri)
             } else {
                 Log.d(TAG, "No media selected")
             }
         }
-        btnPickImage.setOnClickListener {
+        binding.btnPickImage.setOnClickListener {
             Log.i(TAG, "Open up image picker on device")
 
             // Launch the photo picker and let the user choose only images.
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        btnSubmit.setOnClickListener {
-            postThePhoto(etDescription.text.toString())
+        binding.btnSubmit.setOnClickListener {
+            postThePhoto()
         }
         getTheCurrentUser()
 
@@ -75,12 +71,12 @@ class CreateFragment : Fragment() {
             }
     }
 
-    private fun postThePhoto(description: String) {
+    private fun postThePhoto() {
         if (photoUri == null) {
             Toast.makeText(this.requireContext(), "No photo selected", Toast.LENGTH_SHORT).show()
             return
         }
-        if (description.isBlank()) {
+        if (binding.etDescription.text.toString().isBlank()) {
             Toast.makeText(this.requireContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show()
             return
         }
