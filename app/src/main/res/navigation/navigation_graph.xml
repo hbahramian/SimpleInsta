@@ -38,5 +38,9 @@
         android:id="@+id/createFragment"
         android:name="edu.iu.habahram.simpleinsta.CreateFragment"
         android:label="fragment_create"
-        tools:layout="@layout/fragment_create" />
+        tools:layout="@layout/fragment_create" >
+        <action
+            android:id="@+id/action_createFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
+    </fragment>
 </navigation>

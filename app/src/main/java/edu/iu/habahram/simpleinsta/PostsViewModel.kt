@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObjects
@@ -11,6 +12,8 @@ import edu.iu.habahram.simpleinsta.model.Post
 import edu.iu.habahram.simpleinsta.model.User
 
 class PostsViewModel : ViewModel() {
+
+
     val TAG = "PostsViewModel"
     var signedInUser: User? = null
     private val _posts: MutableLiveData<MutableList<Post>> = MutableLiveData()
@@ -46,5 +49,10 @@ class PostsViewModel : ViewModel() {
                 Log.i(TAG, "Post ${post}")
             }
         }
+    }
+
+    fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        signedInUser = null
     }
 }

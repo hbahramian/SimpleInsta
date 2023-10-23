@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import com.google.firebase.auth.FirebaseAuth
 import edu.iu.habahram.simpleinsta.databinding.FragmentProfileBinding
 
 
@@ -35,7 +34,8 @@ class ProfileFragment : Fragment() {
             when (it.itemId) {
                 R.id.menu_logout -> {
                     // logout and Navigate to login screen.
-                    FirebaseAuth.getInstance().signOut()
+
+                    binding.viewModel?.signOut()
                     view.findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
                     true
                 }

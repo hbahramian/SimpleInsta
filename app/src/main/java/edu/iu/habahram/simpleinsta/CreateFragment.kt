@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -125,6 +126,11 @@ class CreateFragment : Fragment() {
                 binding.imageView.setImageResource(0)
                 Toast.makeText(this.requireContext(), "Success!", Toast.LENGTH_SHORT).show()
             }
+        navigateToPostsScreen()
+    }
+
+    private fun navigateToPostsScreen() {
+        binding.root.findNavController().navigate(R.id.action_createFragment_to_postsFragment)
     }
 
 
