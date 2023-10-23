@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_postsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_postsFragment_to_createFragment"
+            app:destination="@id/createFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -31,4 +34,9 @@
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="edu.iu.habahram.simpleinsta.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create" />
 </navigation>

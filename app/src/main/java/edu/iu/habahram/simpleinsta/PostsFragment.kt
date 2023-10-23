@@ -35,6 +35,10 @@ class PostsFragment : Fragment() {
 //                adapter.notifyDataSetChanged()
             }
         })
+
+        binding.fabCreate.setOnClickListener {
+          view.findNavController().navigate(R.id.action_postsFragment_to_createFragment)
+        }
         return view
     }
 
