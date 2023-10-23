@@ -12,7 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import edu.iu.habahram.simpleinsta.databinding.FragmentCreateBinding
+import edu.iu.habahram.simpleinsta.model.Post
 import edu.iu.habahram.simpleinsta.model.User
 
 
@@ -23,6 +26,7 @@ class CreateFragment : Fragment() {
     private var signedInUser: User? = null
     private var photoUri: Uri? = null
     private lateinit var firestoreDb: FirebaseFirestore
+    private lateinit var storageReference: StorageReference
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +35,8 @@ class CreateFragment : Fragment() {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
         // Registers a photo picker activity launcher in single-select mode.
         val view = binding.root
+        firestoreDb = FirebaseFirestore.getInstance()
+        storageReference = FirebaseStorage.getInstance().reference
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
@@ -58,7 +64,7 @@ class CreateFragment : Fragment() {
     }
 
     private fun getTheCurrentUser() {
-        firestoreDb = FirebaseFirestore.getInstance()
+
         firestoreDb.collection("users")
             .document(FirebaseAuth.getInstance().currentUser?.uid as String)
             .get()
@@ -77,13 +83,48 @@ class CreateFragment : Fragment() {
             return
         }
         if (binding.etDescription.text.toString().isBlank()) {
-            Toast.makeText(this.requireContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.requireContext(), "Description cannot be empty", Toast.LENGTH_SHORT)
+                .show()
             return
         }
         if (signedInUser == null) {
-            Toast.makeText(this.requireContext(), "No signed in user, please wait", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this.requireContext(),
+                "No signed in user, please wait",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
+        binding.btnSubmit.isEnabled = false
+        val photoUploadUri = photoUri as Uri
+        val photoReference =
+            storageReference.child("images/${System.currentTimeMillis()}-photo.jpg")
+        // Upload photo to Firebase Storage
+        photoReference.putFile(photoUploadUri)
+            .continueWithTask { photoUploadTask ->
+                Log.i(TAG, "uploaded bytes: ${photoUploadTask.result?.bytesTransferred}")
+                // Retrieve image url of the uploaded image
+                photoReference.downloadUrl
+            }.continueWithTask { downloadUrlTask ->
+                // Create a post object with the image URL and add that to the posts collection
+                val post = Post(
+                    binding.etDescription.text.toString(),
+                    downloadUrlTask.result.toString(),
+                    System.currentTimeMillis(),
+                    signedInUser
+                )
+                firestoreDb.collection("posts").add(post)
+            }.addOnCompleteListener { postCreationTask ->
+                binding.btnSubmit.isEnabled = true
+                if (!postCreationTask.isSuccessful) {
+                    Log.e(TAG, "Exception during Firebase operations", postCreationTask.exception)
+                    Toast.makeText(this.requireContext(), "Failed to save post", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                binding.etDescription.text.clear()
+                binding.imageView.setImageResource(0)
+                Toast.makeText(this.requireContext(), "Success!", Toast.LENGTH_SHORT).show()
+            }
     }
 
 
